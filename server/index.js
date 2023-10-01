@@ -9,8 +9,8 @@ const app = express()
 
 app.use(
   cors({
-    origin: ['http://localhost:8899', 'http://192.168.0.101:8899', '*'],
-    methods: ['GET', 'PUT', 'POST'],
+    origin: ['http://localhost:8899', 'http://192.168.0.101:8899'],
+    methods: ['GET', 'PUT', 'POST', 'DELETE'],
     credentials: true
   }),
 );

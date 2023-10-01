@@ -44,6 +44,38 @@ class TodoController {
       console.log('error', e.message)
     }
   }
+
+  async setCompleted(req, res) {
+    try {
+      const { status, id } = req.body
+      const {dataValues} = jwt.decode(req.headers.cookie.replace('token=', ''))
+      const todo = await ToDo.update({ status: status }, { where: { userId: dataValues.id, id } })
+      
+      if (!todo) {
+        return res.status(200).send('We didnt find your ToDos')
+      }
+
+      return res.status(201).send(todo)
+    } catch (e) {
+      console.log('error', e.message)
+    }
+  }
+
+  async deleteTodo(req, res) {
+    try {
+      const id = req.params.id
+      const {dataValues} = jwt.decode(req.headers.cookie.replace('token=', ''))
+      const todo = await ToDo.destroy({ where: { userId: dataValues.id, id: id } })
+      
+      if (!todo) {
+        return res.sendStatus(200).send('We didnt find your ToDos')
+      }
+
+      return res.sendStatus(201).send(todo)
+    } catch (e) {
+      console.log('error', e.message)
+    }
+  }
 }
 
 export default new TodoController()
