@@ -1,4 +1,4 @@
-export const onConnection = (io: any, socket: any) => {
+export const onConnection = (io, socket) => {
   console.log('socket', socket.handshake)
   const { roomId, userName } = socket.handshake.query;
 

@@ -2,13 +2,18 @@ import React, { useState } from 'react'
 import { Card, Input, Button } from 'antd'
 import { RocketOutlined } from '@ant-design/icons'
 import { socket } from '../../utils/socket'
+import { sendMessage } from '@/utils/socketio.service'
 
-const ChatForm = ({ user }) => {
+const ChatForm = ({ userName, room }) => {
   const [message, setMessage] = useState("")
 
   const handleSubmit = () => {
-    socket.emit('chat message', { message, user })
-    setMessage('')
+    if (message) {
+      sendMessage({ message, roomName: 'myRandomChatRoomId' }, cb => {
+        console.log(cb)
+      })
+      setMessage('')
+    }
   }
 
   return (

@@ -1,32 +1,57 @@
 import React, { useEffect } from 'react'
-import { Card } from 'antd'
-import ChatName from './components/ChatName'
-import Chat from './components/Chat'
-import ChatForm from './components/ChatForm'
-import { socket } from './utils/socket'
-import { nanoid } from 'nanoid'
+import { axiosSetup } from './utils/axios'
+import { RouterElement } from './routes'
+import { getCookie } from './utils/cookies'
+import jwt_decode from 'jwt-decode'
+import { useSetRecoilState } from 'recoil'
+import { userState } from './state/userState'
+import { useNavigate } from 'react-router-dom'
 
-function App() {
-  const user = {
-    userName: `User-${nanoid(10)}`,
-    userId: nanoid(10)
-  }
+export default function App() {
+  const setUser = useSetRecoilState(userState)
+  const token = getCookie('token')
+  const navigate = useNavigate()
+  axiosSetup()
 
   useEffect(() => {
-    socket.connect()
+    if (token) {
+      const decodedUser = jwt_decode(token)
+      if (decodedUser) {
+        console.log('decodedUser', decodedUser)
+        setUser(decodedUser?.dataValues)
+      }
+    } else {
+      navigate('/403')
+    }
+  }, [token])
 
-    return () => { socket.disconnect() }
-  }, [])
+
+  // const [token, setToken] = useState('')
+  // const [room, setRoom] = useState('')
+  // const userName = `User-${nanoid(5)}`
+
+  // useEffect(() => {
+  //   initiateSocketConnection(token)
+  //   subscribeToChat((err, data) => {
+  //     console.log(data)
+  //   })
+
+
+  //   return () => {
+  //     initiateSocketConnection()
+  //   }
+  // }, [])
 
   return (
     <>
+      <RouterElement />
+
+      {/* <Rooms userName={userName} setRoom={setRoom} room={room} />
       <Card style={{ width: 700, height: 'calc(100vh - 100px)' }}>
-        <ChatName />
-        <Chat user={user} />
-        <ChatForm user={user} />
-      </Card>
+        <ChatName userName={userName} room={room} />
+        <Chat userName={userName} />
+        <ChatForm userName={userName} room={room} />
+      </Card> */}
     </>
   )
 }
-
-export default App
