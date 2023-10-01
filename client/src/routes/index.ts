@@ -5,7 +5,11 @@ export const RouterElement = () => {
   const routes = [
     {
       path: '/',
-      element: lazyLoadRoutes({componentName: 'Main'})
+      element: lazyLoadRoutes({componentName: 'Main', withLayout: true})
+    },
+    {
+      path: '/todos',
+      element: lazyLoadRoutes({componentName: 'ToDo', withLayout: true})
     },
     {
       path: '/login',

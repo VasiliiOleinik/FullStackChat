@@ -21,8 +21,6 @@ class UserController {
       const user = User.findOne({
         where: userId
       })
-      console.log('user', user)
-
       if (!user) {
         return res.status(404).json({message: "User not found"})
       }
@@ -36,7 +34,6 @@ class UserController {
   async createUser(req, res) {
     try {
       const { name, email, password, role } = req.body
-      console.log('req.body', req.body)
       const isUserExist = await User.findOne({
         where: {
           email
